@@ -1,5 +1,3 @@
-
-
 pipeline {
     environment {
         ECR_REGISTRY = "457069147652.dkr.ecr.us-east-1.amazonaws.com"
