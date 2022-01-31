@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     environment {
         ECR_REGISTRY = "457069147652.dkr.ecr.us-east-1.amazonaws.com"
         APP_REPO_NAME= "XeniyaFesenko/todo-app-node-project"
