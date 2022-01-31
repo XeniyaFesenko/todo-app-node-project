@@ -1,12 +1,13 @@
 
+
 pipeline {
-    agent any
     environment {
-        ECR_REGISTRY = "<aws_account_id>.dkr.ecr.us-east-1.amazonaws.com"
-        APP_REPO_NAME= "clarusway/to-do-app"
+        ECR_REGISTRY = "457069147652.dkr.ecr.us-east-1.amazonaws.com"
+        APP_REPO_NAME= "XeniyaFesenko/todo-app-node-project"
+        PATH="/usr/local/bin/:${env.PATH}"        
     }
     stages {
-        stage("Run app on Docker"){
+        stage("running app on Docker "){
             agent{
                 docker{
                     image 'node:12-alpine'
@@ -16,19 +17,19 @@ pipeline {
                 withEnv(["HOME=${env.WORKSPACE}"]) {
                     sh 'yarn install --production'
                     sh 'npm install'
-                }   
+                }
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build --force-rm -t "$ECR_REGISTRY/$APP_REPO_NAME:latest" .'
+                sh 'docker build --force-rm -t "$ECR_REGISTRY/$APP_REPO_NAME" .' 
                 sh 'docker image ls'
             }
         }
         stage('Push Image to ECR Repo') {
             steps {
-                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "$ECR_REGISTRY"'
-                sh 'docker push "$ECR_REGISTRY/$APP_REPO_NAME:latest"'
+                sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_REGISTRY'
+                sh 'docker push $ECR_REGISTRY/$APP_REPO_NAME:latest'
             }
         }
     }
